@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+export UNIX_APIDIR=/opt/vendor/remedy-unix
+echo "Using your project's Remedy API ($UNIX_APIDIR)"
+export LD_LIBRARY_PATH=$UNIX_APIDIR:/opt/mylibs
+export PATH=$PWD/vendor:$PATH:$LD_LIBRARY_PATH
+export CLASSPATH=$PWD/vendor:$CLASSPATH:$LD_LIBRARY_PATH
+

@@ -1,0 +1,70 @@
+development: &development_defaults
+  key:    1234567890ABCDEF1234567890ABCDEF
+  iv:     1234567890ABCDEF
+  cipher: aes-128-cbc
+
+test:
+  <<: *development_defaults
+
+lab914:
+  <<: *development_defaults
+
+
+
+
+production: &production
+  # Since the key to encrypt and decrypt with must NOT be stored along with the
+  # source code, we only hold a RSA key that is used to unlock the file
+  # containing the actual symmetric encryption key
+  #
+  # Sample RSA Key, DO NOT use this RSA key, generate a new one using
+  #    openssl genrsa 2048
+  private_rsa_key: |
+     -----BEGIN RSA PRIVATE KEY-----
+     MIIEpAIBAAKCAQEA7wjURC2C74UmBDt1PhF81FxkFyMrqofq7Yo3U6mxiRNgz2cZ
+     iiexd116d0O5zHPNSs4daPuWkJTD7ylNAIyg6KfXYIBSttAn4PMmBxOznVQFI6zz
+     Lj0wN0lj9rnRsAK4YzdU4OLb+o3AD66JSy4kYCUhqiZTXoWZG8anf077VMB85PE+
+     gzzy34ftPe73eokwDCnUCsAeS61KWTvCM/o9oYhX/bzmmOjmd6/xJkIn4sykWA2v
+     VUVQqUtsvgjFZqgyyq87SZszvexc7a8V2p/e+QqERiYggLH0IZ+vQJ7UZhPh1si8
+     zx/Ie0IP2Z9O7jUJtkZ869U6rEQ8Cdewn1LM/wIDAQABAoIBAFX3pO/INnkSN/P5
+     tlbWT0DI4a54lbHFJDa+KNvMAe+8qmqtN8A6OlclpW/TSbVASKsIqgchxKrG9hjD
+     j9AMw6opAwrP2++nuU/r4tdUvJpup1KHVwZgN0ELAgqwFbvpnosAUWR38omQBW0e
+     Zn5FYAu8Dvl0wzMRdVlJ/t+IdleqGM8ZpSOY+9VzpEq00wUgSdzgR1dKXg+54dGI
+     Y5hfHI0PLR8h1o42DMw0PJdRaTjkWfA69b2eTIaxbylS3ZHN0O0DzB59lau+hnO9
+     zeyWdp9iGA6iS0s8N1B22Fy+30Ckv+Qhp1QODTOdBHvVZemjIx8snLO0sjCTZALy
+     +k6fD4ECgYEA+g6Yod/FzBcG2XK8i/O9BxSFWF2w0F1TI6JfreqM6zPiX4+jjz6z
+     klleeNQr9w49CsiP9UgVWWZneARt12qpp5hcgANeBKwEu826QOmEvMJA9/JybFDB
+     AtBqkxjH59kOMycLxTJhefa8jzCOzdnPWcaVjc+GfWXait0SVB7LVSECgYEA9Lcr
+     XHp5Q8cvUQaYj/StdJIhsHz4Ii5Ny8pHAcrt2BtdyNUpdnVgakXMbr7wMTJBPNeq
+     UsxNPwshECFwR1JkOA4w1QMvTSm154ZPZYtgC8xLsaNreivn9xwYGfdR2hH8W4t3
+     auWbg+pPlhHP0Tl85n/5nnONQgeCTB40wzXlvh8CgYEAtbLHe9BDROJyiq0RjkxE
+     zZE+t5AUu8Mkd180UQZ+8SVZV4DjI2I3T596wyfA7ps9BcnouR1wze5YPuBRBFew
+     AWT3ydkohxKLuf9qWGKWniY02TYlqMkhBq900YAPOkwBQnAb4GWUaPA94XoyOigL
+     wDtJTqs+GX5aR88N02ww6aECgYEArR6j21F9VjikPaL37OdAinYSxUMzWyL8wE3C
+     O/9ukXKSv1Ale/r/kU79l98WFwehZUSA5wBHKXFbG4k8YAhmg81uOFN/dAws9rRq
+     mMCn2tDVP78Heq9y87r5Re1UB3yv1adtfL8gbIsncFf7d90+geZJFhJS/UJIqEa6
+     Ntt7QysCgYBqLklDJQ/ZaPfg6taKZ4yUFgFwq3E9d8RrJW/LiaKgs6LnppmPSl8k
+     y2YziQVF6lui6NRBF8SybGFRfg8BmMHMWuA4PYsxhf4SWMJ/1IbEH8a19i59QeKu
+     Q4Ei4xMw4CXL7kXENiOQgDGOaWqvcMo6pyQFSjIV/S9UrXVdflKo9Q==
+     -----END RSA PRIVATE KEY-----
+
+  # List Symmetric Key files in the order of current / latest first
+  ciphers:
+     -
+        # Filename containing Symmetric Encryption Key encrypted using the
+        # RSA public key derived from the private key above
+        key_filename: config/keys/.sasync.key
+        iv_filename:  config/keys/.sasync.iv
+
+        # Encryption cipher
+        #   Recommended values:
+        #      aes-256-cbc
+        #         256 AES CBC Algorithm. Very strong
+        #         Ruby 1.8.7 MRI Approximately 100,000 encryptions or decryptions per second
+        #         JRuby 1.6.7 with Ruby 1.8.7 Approximately 22,000 encryptions or decryptions per second
+        #      aes-128-cbc
+        #         128 AES CBC Algorithm. Less strong.
+        #         Ruby 1.8.7 MRI Approximately 100,000 encryptions or decryptions per second
+        #         JRuby 1.6.7 with Ruby 1.8.7 Approximately 22,000 encryptions or decryptions per second
+        cipher: aes-128-cbc
+        encoding: base64strict

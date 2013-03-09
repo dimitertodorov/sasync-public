@@ -1,0 +1,14 @@
+lab914: &lab914
+  server: '10.22.10.10'
+  port: 443
+  username: 'detuser'
+  password: 'detpassword'
+  version: 914
+
+production: &production
+  server: '44.44.44.44'
+  port: 443
+  username: 'localuser'
+  password: 'lpassword'
+  version: 787
+
